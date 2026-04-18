@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Minimap2 Wasm Demo</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 1em; max-width: 800px; margin: 0 auto; }
+        .input-group { margin-bottom: 1em; }
+        label { display: block; font-weight: bold; margin-bottom: 0.2em; }
+        input[type="text"] { width: 98%; padding: 0.4em; }
+        button { font-size: 1em; padding: 0.5em 1em; cursor: pointer; margin-top: 1em; }
+        pre { background-color: #00a2ff; border: 1px solid #0048fe; padding: 1em; white-space: pre-wrap; word-wrap: break-word; }
+        /* 输出窗格样式 */
+        .output-window { width: 100%; max-height: 300px; overflow: auto; white-space: pre-wrap;       /* 保留换行/空格，适合 SAM/文本输出 */
+            background: #ffffff; border: 1px solid #ccc; padding: 8px; font-family: monospace; /* 等宽字体更易读 */
+            font-size: 12px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <h1>Minimap2 WebAssembly Demo</h1>
+    <p>Upload a reference FASTA file and a query FASTA file, then click "Run Alignment". The result will be displayed below.</p>
+    <p>
+        parameter can be check on page <a href='https://lh3.github.io/minimap2/minimap2.html' target='_blank'>minimap2 github</a>
+    </p>
+
+    <div class="input-group">
+        <label for="ref-file-input">1. Reference FASTA File</label>
+        <input type="file" id="ref-file-input" accept=".fa,.fasta,.fna,.fas">
+    </div>
+
+    <div class="file-info" id="ref-info"><br></div>
+
+    <div class="input-group">
+        <label for="query-file-input">2. Query FASTA File</label>
+        <input type="file" id="query-file-input" accept=".fa,.fasta,.fna,.fas">
+    </div>
+
+    <div class="file-info" id="query-info"><br></div>
+
+    <div class="input-group">
+        <label for="params-input">3. Minimap2 Parameters</label>
+        <input type="text" id="params-input" value="-a">
+    </div>
+
+    <h2>Alignment Result</h2>
+    <button id="run-button" disabled>Loading Wasm Module...</button>
+    <button id="download-button" disabled>下载 SAM</button>
+    <pre id="output" class="output-window">Please upload files and click "Run Alignment".</pre>
+
+    <input type="range" id="score-filter" min="0" max="60" value="0">
+    <label for="score-filter">最小 score: <span id="score-value">0</span></label>
+    <canvas id="dotplot-canvas" width="900" height="900"></canvas>
+    <div id="legend">
+        <span style="display:inline-block;width:16px;height:16px;background:#3c8ce6;margin-right:4px;"></span> 正向
+        <span style="display:inline-block;width:16px;height:16px;background:#dc5050;margin:0 4px 0 12px;"></span> 反向
+    </div>
+    <ul id="segment-list"></ul>
+
+    <script src="minimap2.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
